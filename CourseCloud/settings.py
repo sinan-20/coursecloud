@@ -42,7 +42,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'instructor',
     'embed_video',
-    "student"
+    "student",
+
+    #  enabling social authentication
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+
 ]
 
 MIDDLEWARE = [
@@ -52,6 +60,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -136,3 +145,35 @@ AUTH_USER_MODEL = 'instructor.User'
 #     "SITE_HEADER": "Ajay Rajendran",
 #     "SITE_URL": "/admin/",  # Change if needed
 # }
+
+AUTHENTICATION_BACKENDS = [
+    
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+    
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': config('client_id'),
+            'secret': config('secret'),
+            
+        }
+    }
+}
+
+SITE_ID=1
+
+LOGIN_URL="signin"
+
+LOGIN_REDIRECT_URL="index"
+
+SOCIALACCOUNT_LOGIN_ON_GET=True
+
